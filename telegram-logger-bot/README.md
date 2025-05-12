@@ -11,7 +11,7 @@
 
    docker compose down
 
-### 🚀 2. How to Start the EFK Stack Again:
+###  2. How to Start the EFK Stack Again:
 
 1. Ensure you're in the `EFK-stack` directory:
 
@@ -38,7 +38,7 @@
      @timestamp
    * Click **Create index pattern**
 
-### 🤖 3. How to Run the Telegram Bot:
+###  3. How to Run the Telegram Bot:
 
 1. Navigate to the bot’s directory:
 
@@ -60,14 +60,14 @@
 
 4. Test the bot by sending a message to it via Telegram.
 
-### ⛔ 4. How to Stop the Bot:
+###  4. How to Stop the Bot:
 
 1. Press `Ctrl + C` in the terminal running the bot.
 2. Deactivate the virtual environment:
 
    deactivate
 
-### 🧪 Final Check:
+###  Final Check:
 
 1. Go to Kibana:
 
