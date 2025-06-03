@@ -63,7 +63,7 @@
 1. Navigate to the bot’s directory:
 
    ```bash
-   cd ../telegram-logger-bot
+   cd telegram-logger-bot
    ```
 2. Activate the virtual environment:
 

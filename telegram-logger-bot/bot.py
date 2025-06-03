@@ -1,17 +1,25 @@
 import logging
 import requests
+import threading
+from prometheus_client import start_http_server, Counter
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters
 
-# Увімкнення логування
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
+# Метрики
+messages_counter = Counter("received_messages_total", "Кількість отриманих повідомлень")
 
-# Токен твого бота
+# Запуск сервера для Prometheus
+def start_metrics_server():
+    start_http_server(9091)
+
+metrics_thread = threading.Thread(target=start_metrics_server)
+metrics_thread.daemon = True
+metrics_thread.start()
+
+# Telegram Bot
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 BOT_TOKEN = "8182334735:AAGJSB1IGEPQjM5oxK7g0BaeHwr4e7PSobY"
-FLUENTD_URL = "http://localhost:8080"  # Це адреса Fluentd
+FLUENTD_URL = "http://localhost:8080"
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
@@ -23,13 +31,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "Text": message,
     }
 
-    # Відправка логів у Fluentd
     try:
         requests.post(FLUENTD_URL, json=data)
         logging.info("Лог надіслано у Fluentd")
     except Exception as e:
         logging.error(f"Не вдалося надіслати лог: {e}")
 
+    messages_counter.inc()
     await update.message.reply_text("Повідомлення отримано та залоговано!")
 
 if __name__ == '__main__':
